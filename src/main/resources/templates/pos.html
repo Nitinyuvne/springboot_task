@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>POS Page</title>
+    <style>
+        /* Reset some default */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #2c3e50;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #27ae60;
+            color: white;
+            padding: 24px 40px;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 30px;
+            user-select: none;
+        }
+
+        .back-button {
+            margin: 20px 0 10px 0;
+            width: 90%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .back-button a {
+            text-decoration: none;
+        }
+
+        .back-button button {
+            background-color: #fff;
+            border: 2px solid #27ae60;
+            color: #27ae60;
+            padding: 10px 26px;
+            font-size: 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(39, 174, 96, 0.25);
+        }
+
+        .back-button button:hover {
+            background-color: #27ae60;
+            color: white;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.5);
+        }
+
+        .product-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px 20px 40px 20px;
+            gap: 24px;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .product {
+            background-color: white;
+            border-radius: 12px;
+            width: 220px;
+            padding: 22px 18px 30px 18px;
+            text-align: center;
+            box-shadow: 0 8px 18px rgba(44, 62, 80, 0.1);
+            transition: transform 0.25s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            user-select: none;
+        }
+
+        .product:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 14px 26px rgba(39, 174, 96, 0.25);
+        }
+
+        .product img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            user-select: none;
+        }
+
+        .product p {
+            margin: 6px 0;
+            font-size: 16px;
+            color: #34495e;
+        }
+
+        .product strong {
+            font-size: 20px;
+            color: #2c3e50;
+            letter-spacing: 0.02em;
+        }
+
+        .quantity-control {
+            margin-top: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .quantity-control button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            font-size: 22px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: 700;
+            transition: background-color 0.25s ease;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        .quantity-control button:hover {
+            background-color: #219150;
+        }
+
+        .quantity-control span.quantity {
+            font-size: 20px;
+            font-weight: 700;
+            color: #27ae60;
+            width: 36px;
+            display: inline-block;
+            user-select: none;
+        }
+
+        /* Total price */
+        .product p.total-price {
+            margin-top: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            color: #16a085;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            max-width: 700px;
+            width: 90%;
+            margin: 30px auto 50px auto;
+            padding: 28px 32px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 14px 30px rgba(39, 174, 96, 0.2);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .order-summary h3 {
+            text-align: center;
+            margin-bottom: 26px;
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 28px;
+            user-select: none;
+        }
+
+        #order-items p {
+            margin: 10px 0;
+            font-size: 17px;
+            color: #34495e;
+            user-select: none;
+        }
+
+        #order-items p.empty {
+            color: #95a5a6;
+            font-style: italic;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ecf0f1;
+            margin: 20px 0;
+        }
+
+        .grand-total {
+            text-align: right;
+            font-weight: 700;
+            font-size: 20px;
+            color: #27ae60;
+            user-select: none;
+        }
+
+        #grand-total {
+            font-size: 22px;
+        }
+
+        /* Place Order Button */
+        #place-order-btn {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 14px 36px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin: 0 auto;
+            font-weight: 700;
+            user-select: none;
+            box-shadow: 0 6px 14px rgba(39, 174, 96, 0.35);
+        }
+
+        #place-order-btn:hover {
+            background-color: #219150;
+            box-shadow: 0 8px 22px rgba(33, 145, 80, 0.45);
+        }
+
+        /* Payment Method Section */
+        .payment-method {
+            margin-bottom: 50px;
+            width: 90%;
+            max-width: 700px;
+            background: white;
+            padding: 24px 30px;
+            border-radius: 16px;
+            box-shadow: 0 14px 28px rgba(39, 174, 96, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            user-select: none;
+        }
+
+        .payment-method h4 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 22px;
+            color: #2c3e50;
+            user-select: none;
+        }
+
+        .payment-method label {
+            font-size: 18px;
+            color: #34495e;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .payment-method input[type="radio"] {
+            margin-right: 8px;
+            cursor: pointer;
+            accent-color: #27ae60;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .product-list {
+                gap: 18px;
+                padding: 20px 10px 40px 10px;
+            }
+
+            .product {
+                width: 100%;
+                max-width: 320px;
+                margin: 0 auto;
+            }
+
+            .payment-method {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        POS - Product List
+    </header>
+
+    <div class="back-button">
+        <a th:href="@{/}">
+            <button>⬅ Back to Dashboard</button>
+        </a>
+    </div>
+
+    <div class="product-list">
+        <section th:each="product, stat : ${products}" class="product">
+            <img th:src="${product.image}" alt="Product image" />
+            <p><strong th:text="${product.title}">Product Title</strong></p>
+            <p>Price: ₹<span th:text="${product.price}">0.0</span></p>
+
+            <!-- Total price display -->
+            <p class="total-price">Total: ₹<span th:id="'total-' + ${stat.index}" id="total-0" th:text="${product.price}">0.0</span></p>
+        
+            <div class="quantity-control">        
+                <button type="button"
+                        th:attr="onclick=|decreaseQuantity('qty-${stat.index}', ${product.price}, 'total-${stat.index}')|">−</button>
+    
+                <span class="quantity" th:id="'qty-' + ${stat.index}" id="qty-0">0</span>
+    
+                <button type="button"
+                        th:attr="onclick=|increaseQuantity('qty-${stat.index}', ${product.price}, 'total-${stat.index}')|">+</button>
+            </div>                
+        </section>
+    </div>
+
+    <div class="order-summary">
+        <h3>Order Summary</h3>
+        <div id="order-items">
+            <p class="empty" style="text-align:center;">No items added yet.</p>
+        </div>
+        <hr>
+        <p class="grand-total">
+            Grand Total: ₹<span id="grand-total">0.00</span>
+        </p>
+        
+        <button id="place-order-btn" onclick="placeOrder()">Place Order</button>
+    </div>
+
+    <div class="payment-method">
+        <h4>Select Payment Method:</h4>
+        <label>
+            <input type="radio" name="payment-method" value="Cash" checked> Cash
+        </label>
+        <label>
+            <input type="radio" name="payment-method" value="Credit Card"> Credit Card
+        </label>
+        <label>
+            <input type="radio" name="payment-method" value="UPI"> UPI
+        </label>
+    </div>
+
+    <script>
+        // ... (Same JavaScript logic you had, just keeping it for continuity)
+
+        function increaseQuantity(qtyId, price, totalId) {
+            const qtySpan = document.getElementById(qtyId);
+            let qty = parseInt(qtySpan.textContent);
+            qty++;
+            qtySpan.textContent = qty;
+            updateTotalPrice(qty, price, totalId);
+            updateOrderSummary();
+        }
+
+        function decreaseQuantity(qtyId, price, totalId) {
+            const qtySpan = document.getElementById(qtyId);
+            let qty = parseInt(qtySpan.textContent);
+            if(qty > 0) {
+                qty--;
+                qtySpan.textContent = qty;
+                updateTotalPrice(qty, price, totalId);
+                updateOrderSummary();
+            }
+        }
+
+        function updateTotalPrice(qty, price, totalId) {
+            const totalPriceElem = document.getElementById(totalId);
+            let totalPrice = (qty * price).toFixed(2);
+            totalPriceElem.textContent = totalPrice;
+        }
+
+        function updateOrderSummary() {
+            const products = document.querySelectorAll('.product');
+            let orderItems = document.getElementById('order-items');
+            let grandTotal = 0;
+            orderItems.innerHTML = '';
+
+            products.forEach((product, index) => {
+                let qty = parseInt(document.getElementById(`qty-${index}`).textContent);
+                if(qty > 0) {
+                    let title = product.querySelector('p strong').textContent;
+                    let price = parseFloat(product.querySelector('p:nth-child(3) span').textContent);
+                    let total = qty * price;
+                    grandTotal += total;
+
+                    let item = document.createElement('p');
+                    item.textContent = `${title} × ${qty} = ₹${total.toFixed(2)}`;
+                    orderItems.appendChild(item);
+                }
+            });
+
+            if(orderItems.innerHTML === '') {
+                orderItems.innerHTML = '<p class="empty" style="text-align:center;">No items added yet.</p>';
+            }
+
+            document.getElementById('grand-total').textContent = grandTotal.toFixed(2);
+        }
+
+        function placeOrder() {
+            const grandTotal = parseFloat(document.getElementById('grand-total').textContent);
+            if(grandTotal === 0) {
+                alert('Please add some products to place the order.');
+                return;
+            }
+            const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+            alert(`Order placed successfully!\nTotal: ₹${grandTotal.toFixed(2)}\nPayment Method: ${paymentMethod}`);
+        }
+    </script>
+</body>
+</html>

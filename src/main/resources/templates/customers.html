@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Customers List</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fa;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        .button:hover {
+            background-color: #2980b9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .actions a {
+            color: #3498db;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        .actions a:hover {
+            text-decoration: underline;
+        }
+
+        .top-buttons {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Customers</h2>
+
+    <div class="top-buttons">
+        <a href="/" th:href="@{/}" class="button">🔙 Back to Dashboard</a>
+        <a href="/customers/new" th:href="@{/customers/new}" class="button">➕ Add New Customer</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="cust : ${customers}">
+                <td th:text="${cust.id}">1</td>
+                <td th:text="${cust.name}">Name</td>
+                <td th:text="${cust.email}">Email</td>
+                <td th:text="${cust.phone}">Phone</td>
+                <td class="actions">
+                    <a th:href="@{'/customers/edit/' + ${cust.id}}">✏️ Edit</a>
+                    <a th:href="@{'/customers/delete/' + ${cust.id}}" onclick="return confirm('Are you sure?');">🗑️ Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

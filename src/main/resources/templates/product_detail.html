@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Product Details</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            padding: 40px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: center;
+        }
+
+        img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            object-fit: cover;
+        }
+
+        .info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .info h2 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 28px;
+        }
+
+        .price {
+            font-size: 24px;
+            color: #27ae60;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .desc {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #2980b9;
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #1f618d;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding: 30px 20px;
+            }
+
+            img {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img th:src="${product.image}" alt="Product Image"/>
+        <div class="info">
+            <h2 th:text="${product.title}">Product Title</h2>
+            <div class="price" th:text="'₹ ' + ${product.price}">Price</div>
+            <div class="desc" th:text="${product.description}">Description</div>
+            <a href="/products" class="back-btn">← Back to Products</a>
+        </div>
+    </div>
+</body>
+</html>

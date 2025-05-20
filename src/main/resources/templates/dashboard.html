@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e9f0f7; /* Soft light blue background */
+        }
+
+        /* Sidebar styles */
+        #sidebar {
+            height: 100vh;
+            width: 260px;
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            color: #ecf0f1;
+            position: fixed;
+            top: 0;
+            left: -260px;
+            transition: left 0.3s ease;
+            padding-top: 70px;
+            box-shadow: 3px 0 15px rgba(44, 62, 80, 0.7);
+            border-right: 1px solid #1abc9c;
+        }
+
+        #sidebar.active {
+            left: 0;
+        }
+
+        #sidebar a {
+            display: block;
+            color: #bdc3c7;
+            padding: 16px 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        #sidebar a:hover {
+            background-color: #1abc9c;
+            color: #ffffff;
+            border-left: 4px solid #16a085;
+        }
+
+        /* Top navbar */
+        #navbar {
+            background: #1abc9c; /* Vibrant teal */
+            color: white;
+            padding: 14px 30px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(26, 188, 156, 0.4);
+            font-weight: 700;
+            font-size: 22px;
+            letter-spacing: 1px;
+        }
+
+        #menu-btn {
+            cursor: pointer;
+            font-size: 28px;
+            margin-right: 20px;
+            user-select: none;
+            transition: color 0.3s ease;
+        }
+        #menu-btn:hover {
+            color: #16a085;
+        }
+
+        /* Main content */
+        #content {
+            margin-left: 0;
+            padding: 100px 40px 40px 40px;
+            transition: margin-left 0.3s ease;
+            background-color: #fff;
+            min-height: 100vh;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+            border-radius: 12px 0 0 12px;
+        }
+
+        #content.active {
+            margin-left: 260px;
+        }
+
+        h1 {
+            color: #34495e;
+            font-weight: 700;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 20px;
+            color: #7f8c8d;
+            line-height: 1.5;
+            margin-top: 0;
+        }
+
+        @media (max-width: 768px) {
+            #sidebar {
+                width: 220px;
+            }
+
+            #content.active {
+                margin-left: 220px;
+            }
+        }
+
+        /* Image caption */
+        .caption {
+            color: #95a5a6;
+            margin-top: 15px;
+            font-style: italic;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="navbar">
+    <span id="menu-btn">&#9776;</span>
+    My Dashboard
+</div>
+
+<div id="sidebar">
+    <a th:href="@{/}">🏠 Dashboard Home</a>
+    <a th:href="@{/customers}">👥 Customers</a>
+    <a th:href="@{/products}">🛒 Products</a>
+    <a th:href="@{/pos}">🧾 POS</a>
+</div>
+
+<div id="content">
+    <h1>Welcome to the Dashboard</h1>
+    <p>Find the best deals and manage your shopping with ease.</p>
+
+    <div style="margin-top: 40px; text-align: center;">
+        <img th:src="@{/java.webp}" alt="Java CRUD Image" style="width:100%; height: 700px; object-fit: cover;" />
+        <p class="caption">Bringing you convenience, style, and great deals — all in one store.</p>
+    </div>
+</div>
+
+<script>
+    const menuBtn = document.getElementById('menu-btn');
+    const sidebar = document.getElementById('sidebar');
+    const content = document.getElementById('content');
+
+    menuBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        content.classList.toggle('active');
+    });
+</script>
+</body>
+</html>
